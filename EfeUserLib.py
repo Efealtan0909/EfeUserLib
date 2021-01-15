@@ -19,7 +19,7 @@ def RemoveFromList(List, String):
     return newlist
 
 def GenerateID():
-    with open('UsedIDs.txt', 'r') as f:
+    with open('UsedIDs.txt', 'rx') as f:
         UsedIDs = f.read()
     usedids = []
     for i in range(len(UsedIDs.split('\n'))-1):
@@ -58,6 +58,36 @@ def SetAttrib(User, Attrib, Value):
                 fileread.close()
             else:
                 return False
+    else:
+        return False
+
+def CreateAttrib(User, Attrib, Loc=1):
+    if Attrib in RemoveFroList(os.listdir('USERS/'+User.replace('\n', '').replace(' ', '_')+'/'), 'PERMISSIONS') + os.listdir('USERS/'+User.replace('\n', '').replace(' ', '_')+'/PERMISSIONS/'):
+        return False
+    else:
+        if Loc == 1:
+            filecreate = open('USERS/'+User.replace('\n', '').replace(' ', '_')+'/'+Attrib.upper()+'.txt', 'x')
+            filecreate.close()
+            return True
+        elif Loc == 2:
+            filecreate = open('USERS/'+User.replace('\n', '').replace(' ', '_')+'/PERMISSIONS/'+Attrib.upper()+'.txt', 'x')
+            filecreate.close()
+            return True
+        else:
+            return False
+
+
+def GetAttrib(User, Attrib, Loc=1):
+    if Loc == 1:
+        fileread = open('USERS/'+User.replace('\n', '').replace(' ', '_')+'/'+Attrib.upper()+'.txt')
+        filecontents = fileread.read()
+        fileread.close()
+        return filecontents
+    elif Loc == 2:
+        fileread = open('USERS/'+User.replace('\n', '').replace(' ', '_')+'/PERMISSIONS/'+Attrib.upper()+'.txt')
+        filecontents = fileread.read()
+        fileread.close()
+        return filecontents
     else:
         return False
 
@@ -105,21 +135,22 @@ def Login(User, Pass):
         return False
 
 def Register(Username, Password):
-    if Username.replace('\n', '').replace(' ', '_') not in os.listdir('USERS/'):
-        os.mkdir('USERS/'+Username.replace('\n', '').replace(' ', '_'))
-        with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/USERNAME.txt', 'w+') as f:
-            f.write(Username.replace('\n', ''))
-        with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PASSWORD.txt', 'w+') as f:
-            f.write(Password.replace('\n', ''))
-        with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/ID.txt', 'w+') as f:
-            f.write(GenerateID())
-        with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/MONEY.txt', 'w+') as f:
-            f.write('0')
-        os.mkdir('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PERMISSIONS')
-        with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PERMISSIONS/ISADMIN.txt', 'w+') as f:
-            f.write('False')
-        with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PERMISSIONS/ISBANNED.txt', 'w+') as f:
-            f.write('False')
-        return True
+    if USERS in os.listdir('.'):
+        if Username.replace('\n', '').replace(' ', '_') not in os.listdir('USERS/'):
+            os.mkdir('USERS/'+Username.replace('\n', '').replace(' ', '_'))
+            with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/USERNAME.txt', 'w+') as f:
+                f.write(Username.replace('\n', ''))
+            with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PASSWORD.txt', 'w+') as f:
+                f.write(Password.replace('\n', ''))
+            with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/ID.txt', 'w+') as f:
+                f.write(GenerateID())
+            os.mkdir('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PERMISSIONS')
+            with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PERMISSIONS/ISADMIN.txt', 'w+') as f:
+                f.write('False')
+            with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PERMISSIONS/ISBANNED.txt', 'w+') as f:
+                f.write('False')
+            return True
+        else:
+            return False
     else:
-        return False
+        os.mkdir('')
