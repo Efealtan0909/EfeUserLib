@@ -19,8 +19,15 @@ def RemoveFromList(List, String):
     return newlist
 
 def GenerateID():
-    with open('UsedIDs.txt', 'rx') as f:
-        UsedIDs = f.read()
+    if 'UsedIDs.txt' in os.listdir('.'):
+        with open('UsedIDs.txt', 'r') as f:
+            UsedIDs = f.read()
+    else:
+        with open('UsedIDs.txt', 'x') as f:
+            pass
+        with open('UsedIDs.txt', 'r') as f:
+            UsedIDs = f.read()
+
     usedids = []
     for i in range(len(UsedIDs.split('\n'))-1):
         usedids.append(UsedIDs.split('\n')[i])
@@ -134,23 +141,27 @@ def Login(User, Pass):
     else:
         return False
 
-def Register(Username, Password):
-    if USERS in os.listdir('.'):
-        if Username.replace('\n', '').replace(' ', '_') not in os.listdir('USERS/'):
-            os.mkdir('USERS/'+Username.replace('\n', '').replace(' ', '_'))
-            with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/USERNAME.txt', 'w+') as f:
-                f.write(Username.replace('\n', ''))
-            with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PASSWORD.txt', 'w+') as f:
-                f.write(Password.replace('\n', ''))
-            with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/ID.txt', 'w+') as f:
-                f.write(GenerateID())
-            os.mkdir('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PERMISSIONS')
-            with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PERMISSIONS/ISADMIN.txt', 'w+') as f:
-                f.write('False')
-            with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PERMISSIONS/ISBANNED.txt', 'w+') as f:
-                f.write('False')
-            return True
-        else:
-            return False
+def _reg(Username, Password):
+    if Username.replace('\n', '').replace(' ', '_') not in os.listdir('USERS/'):
+        os.mkdir('USERS/'+Username.replace('\n', '').replace(' ', '_'))
+        with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/USERNAME.txt', 'w+') as f:
+            f.write(Username.replace('\n', ''))
+        with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PASSWORD.txt', 'w+') as f:
+            f.write(Password.replace('\n', ''))
+        with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/ID.txt', 'w+') as f:
+            f.write(GenerateID())
+        os.mkdir('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PERMISSIONS')
+        with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PERMISSIONS/ISADMIN.txt', 'w+') as f:
+            f.write('False')
+        with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PERMISSIONS/ISBANNED.txt', 'w+') as f:
+            f.write('False')
+        return True
     else:
-        os.mkdir('')
+        return False
+
+def Register(Username, Password):
+    if 'USERS' in os.listdir('.'):
+        _reg(Username, Password)
+    else:
+        os.mkdir('USERS')
+        _reg(Username, Password)
