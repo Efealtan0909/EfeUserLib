@@ -81,6 +81,27 @@ def CreateAttrib(User, Attrib, Loc=1):
         else:
             return False
 
+def ListAttribs(User, Loc=1):
+    if User.replace(' ', '_').replace('\n', '') in os.listdir('USERS/'):
+        normaldir = []
+        permsdir = []
+        for i in range(len(RemoveFromList(os.listdir('USERS/'+User.replace(' ', '_').replace('\n', '')+'/'), 'PERMISSIONS'))):
+            normaldir.append(RemoveFromList(os.listdir('USERS/'+User.replace(' ', '_').replace('\n', '')+'/'), 'PERMISSIONS')[i].replace('.txt', ''))
+
+        for i in range(len(RemoveFromList(os.listdir('USERS/'+User.replace(' ', '_').replace('\n', '')+'/'), 'PERMISSIONS'))-2):
+            permsdir.append(os.listdir('USERS/'+User.replace(' ', '_').replace('\n', '')+'/PERMISSIONS/')[i].replace('.txt', ''))
+
+        if Loc == 1:
+            return normaldir + permsdir
+        elif Loc == 2:
+            return normaldir
+        elif Loc == 3:
+            return permsdir
+        else:
+            return False
+    else:
+        return False
+
 
 def GetAttrib(User, Attrib, Loc=1):
     if Loc == 1:
@@ -101,7 +122,6 @@ def ListUsers():
     for user in os.listdir('USERS/'):
         users.append(user)
     return users
-
 
 def InspectUser(User, Loc=None):
     mydict = {'ID': None, 'MONEY': None, 'USERNAME': None, 'ISADMIN': None, 'ISBANNED': None}
