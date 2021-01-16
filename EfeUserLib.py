@@ -53,33 +53,31 @@ def SetAttrib(User, Attrib, Value):
         else:
             if Attrib.upper() + '.txt' in RemoveFromList(os.listdir("USERS/"+User.replace('\n', '').replace(' ', '_')+"/"), 'PERMISSIONS'):
                 filewrite = open("USERS/"+User.replace('\n', '').replace(' ', '_')+"/"+Attrib.upper()+".txt", 'w+')
-                fileread = open("USERS/"+User.replace('\n', '').replace(' ', '_')+"/"+Attrib.upper()+".txt", 'r+')
-                if AddSub == 1:
-                    filewrite.write(str(int(fileread.read()) + int(Value)))
-                else:
-                    if AddSub == 2:
-                        filewrite.write(str(int(fileread.read()) - int(Value)))
-                    else:
-                        filewrite.write(str(Value))
+                filewrite.write(str(Value))
                 filewrite.close()
-                fileread.close()
             else:
                 return False
     else:
         return False
 
 def CreateAttrib(User, Attrib, Loc=1):
-    if Attrib in RemoveFroList(os.listdir('USERS/'+User.replace('\n', '').replace(' ', '_')+'/'), 'PERMISSIONS') + os.listdir('USERS/'+User.replace('\n', '').replace(' ', '_')+'/PERMISSIONS/'):
+    if Attrib in RemoveFromList(os.listdir('USERS/'+User.replace('\n', '').replace(' ', '_')+'/'), 'PERMISSIONS') + os.listdir('USERS/'+User.replace('\n', '').replace(' ', '_')+'/PERMISSIONS/'):
         return False
     else:
         if Loc == 1:
-            filecreate = open('USERS/'+User.replace('\n', '').replace(' ', '_')+'/'+Attrib.upper()+'.txt', 'x')
-            filecreate.close()
-            return True
+            if Attrib.upper()+'.txt' not in RemoveFromList(os.listdir('USERS/'+User.replace('\n', '').replace(' ', '_')+'/'), 'PERMISSIONS'):
+                filecreate = open('USERS/'+User.replace('\n', '').replace(' ', '_')+'/'+Attrib.upper()+'.txt', 'x')
+                filecreate.close()
+                return True
+            else:
+                return False
         elif Loc == 2:
-            filecreate = open('USERS/'+User.replace('\n', '').replace(' ', '_')+'/PERMISSIONS/'+Attrib.upper()+'.txt', 'x')
-            filecreate.close()
-            return True
+            if Attrib.upper()+'.txt' not in os.listdir('USERS/'+User.replace('\n', '').replace(' ', '_')+'/PERMISSIONS/'):
+                filecreate = open('USERS/'+User.replace('\n', '').replace(' ', '_')+'/PERMISSIONS/'+Attrib.upper()+'.txt', 'x')
+                filecreate.close()
+                return True
+            else:
+                return False
         else:
             return False
 
