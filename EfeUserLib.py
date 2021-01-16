@@ -18,7 +18,7 @@ def RemoveFromList(List, String):
 
     return newlist
 
-def GenerateID():
+def GenerateID(Length):
     if 'UsedIDs.txt' in os.listdir('.'):
         with open('UsedIDs.txt', 'r') as f:
             UsedIDs = f.read()
@@ -33,7 +33,7 @@ def GenerateID():
         usedids.append(UsedIDs.split('\n')[i])
     GeneratedID = ""
     while True:
-        while len(GeneratedID) < 16:
+        while len(GeneratedID) < Length:
             GeneratedID = GeneratedID + NUMS[random.randint(len(NUMS)-len(NUMS), len(NUMS)-1)]
         if GeneratedID not in usedids:
             with open('UsedIDs.txt', 'a') as f:
@@ -167,7 +167,7 @@ def _reg(Username, Password):
         with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PASSWORD.txt', 'w+') as f:
             f.write(Password.replace('\n', ''))
         with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/ID.txt', 'w+') as f:
-            f.write(GenerateID())
+            f.write(GenerateID(16))
         os.mkdir('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PERMISSIONS')
         with open('USERS/'+Username.replace('\n', '').replace(' ', '_')+'/PERMISSIONS/ISADMIN.txt', 'w+') as f:
             f.write('False')
