@@ -179,7 +179,13 @@ def _reg(Username, Password):
 
 def Register(Username, Password):
     if 'USERS' in os.listdir('.'):
-        _reg(Username, Password)
+        if Username not in os.listdir('USERS/'):
+            _reg(Username, Password)
+        else:
+            return False
     else:
         os.mkdir('USERS')
-        _reg(Username, Password)
+        if Username not in os.listdir('USERS/'):
+            _reg(Username, Password)
+        else:
+            return False
